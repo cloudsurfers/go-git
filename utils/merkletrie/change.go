@@ -17,6 +17,7 @@ const (
 	Insert
 	Delete
 	Modify
+	Ignore
 )
 
 // String returns the action as a human readable text.
@@ -28,6 +29,8 @@ func (a Action) String() string {
 		return "Delete"
 	case Modify:
 		return "Modify"
+	case Ignore:
+		return "Ignore"
 	default:
 		panic(fmt.Sprintf("unsupported action: %d", a))
 	}

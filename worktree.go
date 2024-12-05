@@ -4,12 +4,6 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"io"
-	"os"
-	"path/filepath"
-	"runtime"
-	"strings"
-
 	"github.com/go-git/go-billy/v5"
 	"github.com/go-git/go-billy/v5/util"
 	"github.com/go-git/go-git/v5/config"
@@ -22,6 +16,12 @@ import (
 	"github.com/go-git/go-git/v5/utils/ioutil"
 	"github.com/go-git/go-git/v5/utils/merkletrie"
 	"github.com/go-git/go-git/v5/utils/sync"
+	"io"
+	"log/slog"
+	"os"
+	"path/filepath"
+	"runtime"
+	"strings"
 )
 
 var (
@@ -132,7 +132,7 @@ func (w *Worktree) PullContext(ctx context.Context, o *PullOptions) error {
 	}
 
 	if err := w.Reset(&ResetOptions{
-		Mode:   o.RMode,
+		Mode:   MergeReset,
 		Commit: ref.Hash(),
 	}); err != nil {
 		return err
@@ -313,6 +313,7 @@ func (w *Worktree) ResetSparsely(opts *ResetOptions, dirs []string) error {
 	}
 
 	if opts.Mode == MergeReset || opts.Mode == HardReset {
+		slog.Info("reseting working tree")
 		if err := w.resetWorktree(t); err != nil {
 			return err
 		}
@@ -380,7 +381,7 @@ func (w *Worktree) resetIndex(t *object.Tree, dirs []string) error {
 }
 
 func (w *Worktree) resetWorktree(t *object.Tree) error {
-	changes, err := w.diffStagingWithWorktree(true, false)
+	changes, err := w.diffStagingWithWorktree(true, true)
 	if err != nil {
 		return err
 	}

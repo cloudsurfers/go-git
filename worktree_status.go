@@ -3,7 +3,9 @@ package git
 import (
 	"bytes"
 	"errors"
+	"fmt"
 	"io"
+	"log/slog"
 	"os"
 	"path"
 	"path/filepath"
@@ -172,13 +174,18 @@ func (w *Worktree) excludeIgnoredChanges(changes merkletrie.Changes) merkletrie.
 		if len(path) != 0 {
 			isDir := (len(ch.To) > 0 && ch.To.IsDir()) || (len(ch.From) > 0 && ch.From.IsDir())
 			if m.Match(path, isDir) {
-				if len(ch.From) == 0 {
-					continue
-				}
+				slog.Info("match found")
+				slog.Info("match found>>from " + fmt.Sprintf("%+v", ch.From))
+				slog.Info("match found>>from len " + fmt.Sprintf("%+v", len(ch.From)))
+				//if len(ch.From) == 0 {
+				slog.Info("match found>>continue")
+				continue
+				//}
 			}
 		}
 		res = append(res, ch)
 	}
+	slog.Info("not excluded changes " + fmt.Sprintf("%+v", res))
 	return res
 }
 

@@ -1,5 +1,10 @@
 package gitignore
 
+import (
+	"fmt"
+	"log/slog"
+)
+
 // Matcher defines a global multi-pattern matcher for gitignore patterns
 type Matcher interface {
 	// Match matches patterns in the order of priorities. As soon as an inclusion or
@@ -22,6 +27,8 @@ type matcher struct {
 func (m *matcher) Match(path []string, isDir bool) bool {
 	n := len(m.patterns)
 	for i := n - 1; i >= 0; i-- {
+		slog.Info("path to ignore? " + fmt.Sprintf("%+v", path))
+		slog.Info("path matching? " + fmt.Sprintf("%+v", m.patterns[i].Match(path, isDir)))
 		if match := m.patterns[i].Match(path, isDir); match > NoMatch {
 			return match == Exclude
 		}
