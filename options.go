@@ -159,6 +159,8 @@ type PullOptions struct {
 	CABundle []byte
 	// ProxyOptions provides info required for connecting to a proxy.
 	ProxyOptions transport.ProxyOptions
+
+	RMode ResetMode
 }
 
 // Validate validates the fields and sets the default values.

@@ -123,7 +123,7 @@ func (w *Worktree) PullContext(ctx context.Context, o *PullOptions) error {
 		}
 	}
 
-	if err != nil && err != plumbing.ErrReferenceNotFound {
+	if err != nil && errors.Is(err, plumbing.ErrReferenceNotFound) {
 		return err
 	}
 
@@ -132,7 +132,7 @@ func (w *Worktree) PullContext(ctx context.Context, o *PullOptions) error {
 	}
 
 	if err := w.Reset(&ResetOptions{
-		Mode:   MergeReset,
+		Mode:   o.RMode,
 		Commit: ref.Hash(),
 	}); err != nil {
 		return err
