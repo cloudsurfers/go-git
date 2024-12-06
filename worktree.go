@@ -313,7 +313,6 @@ func (w *Worktree) ResetSparsely(opts *ResetOptions, dirs []string) error {
 	}
 
 	if opts.Mode == MergeReset || opts.Mode == HardReset {
-		slog.Info("reseting working tree")
 		if err := w.resetWorktree(t); err != nil {
 			return err
 		}
