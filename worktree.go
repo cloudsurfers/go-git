@@ -17,7 +17,6 @@ import (
 	"github.com/go-git/go-git/v5/utils/merkletrie"
 	"github.com/go-git/go-git/v5/utils/sync"
 	"io"
-	"log/slog"
 	"os"
 	"path/filepath"
 	"runtime"
